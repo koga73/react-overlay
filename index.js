@@ -7,6 +7,7 @@ const propTypes = {
 	id: PropTypes.string.isRequired,
 	children: PropTypes.node.isRequired,
 	className: PropTypes.string,
+	isOpen: PropTypes.bool,
 	width: PropTypes.string,
 	height: PropTypes.string,
 	offsetX: PropTypes.string,
@@ -15,6 +16,7 @@ const propTypes = {
 	userClosable: PropTypes.bool,
 	autoFocus: PropTypes.bool,
 	immediate: PropTypes.bool,
+	onRequestClose: PropTypes.func,
 	onBeforeShow: PropTypes.func,
 	onAfterShow: PropTypes.func,
 	onBeforeHide: PropTypes.func,
@@ -24,6 +26,7 @@ const defaultProps = {
 	id: null,
 	children: null,
 	className: null,
+	isOpen: undefined,
 	width: undefined,
 	height: undefined,
 	offsetX: undefined,
@@ -32,6 +35,7 @@ const defaultProps = {
 	userClosable: undefined,
 	autoFocus: undefined,
 	immediate: undefined,
+	onRequestClose: undefined,
 	onBeforeShow: undefined,
 	onAfterShow: undefined,
 	onBeforeHide: undefined,
@@ -42,6 +46,7 @@ class ReactOverlay extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.handler_overlay_requestClose = this.handler_overlay_requestClose.bind(this);
 		this.handler_overlay_beforeShow = this.handler_overlay_beforeShow.bind(this);
 		this.handler_overlay_afterShow = this.handler_overlay_afterShow.bind(this);
 		this.handler_overlay_beforeHide = this.handler_overlay_beforeHide.bind(this);
@@ -49,16 +54,39 @@ class ReactOverlay extends React.Component {
 	}
 
 	componentDidMount() {
+		addRequestCloseHandler(this.handler_overlay_requestClose);
 		Overlay.addEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
 		Overlay.addEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
 		Overlay.addEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
 		Overlay.addEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
 	}
 	componentWillUnmount() {
+		removeRequestCloseHandler(this.handler_overlay_requestClose);
 		Overlay.removeEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
 		Overlay.removeEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
 		Overlay.removeEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
 		Overlay.removeEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
+	}
+
+	componentDidUpdate(prevProps) {
+		if (this.props.isOpen != prevProps.isOpen) {
+			if (this.props.isOpen) {
+				Overlay.show(this.props.id);
+			} else {
+				Overlay.hide();
+			}
+		}
+	}
+
+	handler_overlay_requestClose(detail) {
+		const {id, isOpen, onRequestClose} = this.props;
+		if (typeof isOpen !== typeof undefined) {
+			if (detail === id && onRequestClose) {
+				onRequestClose.call(this, id);
+				return false;
+			}
+		}
+		return true;
 	}
 
 	handler_overlay_beforeShow(evt, detail) {
@@ -91,6 +119,7 @@ class ReactOverlay extends React.Component {
 			id,
 			children,
 			className,
+			isOpen,
 			width,
 			height,
 			offsetX,
@@ -99,6 +128,7 @@ class ReactOverlay extends React.Component {
 			userClosable,
 			autoFocus,
 			immediate,
+			onRequestClose,
 			onBeforeShow,
 			onAfterShow,
 			onBeforeHide,
@@ -132,3 +162,26 @@ for (let prop in Overlay) {
 	ReactOverlay[prop] = Overlay[prop];
 }
 export default ReactOverlay;
+
+//requestCloseHandlers
+const requestCloseHandlers = [];
+Overlay.requestCloseCallback = function(detail) {
+	var result = true;
+	var requestCloseHandlersLen = requestCloseHandlers.length;
+	for (var i = 0; i < requestCloseHandlersLen; i++) {
+		result &= requestCloseHandlers[i](detail);
+	}
+	return !!result; //Convert to boolean
+};
+function addRequestCloseHandler(method) {
+	requestCloseHandlers.push(method);
+}
+function removeRequestCloseHandler(method) {
+	var requestCloseHandlersLen = requestCloseHandlers.length;
+	for (var i = 0; i < requestCloseHandlersLen; i++) {
+		if (requestCloseHandlers[i] === method) {
+			requestCloseHandlers.splice(i, 1);
+			break;
+		}
+	}
+}
