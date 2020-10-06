@@ -3,6 +3,8 @@ import ReactDOM from "react-dom";
 
 import ReactOverlay from "@koga73/react-overlay";
 
+import "./example.scss";
+
 class Example extends React.Component {
 	constructor(props) {
 		super(props);
