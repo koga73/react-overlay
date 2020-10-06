@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 
 import Overlay from "@koga73/overlay";
 
+import "./react-overlay.scss";
+
 const propTypes = {
 	id: PropTypes.string.isRequired,
 	children: PropTypes.node.isRequired,
 	className: PropTypes.string,
+	classPrefix: PropTypes.string,
 	isOpen: PropTypes.bool,
 	width: PropTypes.string,
 	height: PropTypes.string,
@@ -26,6 +29,7 @@ const defaultProps = {
 	id: null,
 	children: null,
 	className: null,
+	classPrefix: null,
 	isOpen: undefined,
 	width: undefined,
 	height: undefined,
@@ -52,14 +56,16 @@ class ReactOverlay extends React.Component {
 		this.handler_overlay_beforeHide = this.handler_overlay_beforeHide.bind(this);
 		this.handler_overlay_afterHide = this.handler_overlay_afterHide.bind(this);
 
-		//New instance per Overlay
-		const overlay = new Overlay();
-		overlay.init();
-		this.state = {overlay: overlay};
+		this.state = {overlay: null};
 	}
 
 	componentDidMount() {
-		const overlay = this.state.overlay;
+		//New instance
+		const overlay = new Overlay();
+		overlay.classPrefix = this.props.classPrefix;
+		overlay.init();
+		this.setState({overlay});
+
 		overlay.requestCloseCallback = this.handler_overlay_requestClose;
 		overlay.addEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
 		overlay.addEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
@@ -68,14 +74,22 @@ class ReactOverlay extends React.Component {
 	}
 	componentWillUnmount() {
 		const overlay = this.state.overlay;
+		if (!overlay) {
+			return;
+		}
 		overlay.requestCloseCallback = null;
 		overlay.removeEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
 		overlay.removeEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
 		overlay.removeEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
 		overlay.removeEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
+
+		//Clean up instance
+		overlay.destroy();
+		this.setState({overlay: null});
 	}
 
 	componentDidUpdate(prevProps) {
+		//NOTE: Should we check classPrefix for update and reinitialize?
 		if (this.props.isOpen != prevProps.isOpen) {
 			const overlay = this.state.overlay;
 			if (this.props.isOpen) {
@@ -127,6 +141,7 @@ class ReactOverlay extends React.Component {
 			id,
 			children,
 			className,
+			classPrefix,
 			isOpen,
 			width,
 			height,
@@ -171,27 +186,12 @@ for (let prop in Overlay) {
 }
 export default ReactOverlay;
 
-/*
-//requestCloseHandlers
-const requestCloseHandlers = [];
-Overlay.requestCloseCallback = function(detail) {
-	var result = true;
-	var requestCloseHandlersLen = requestCloseHandlers.length;
-	for (var i = 0; i < requestCloseHandlersLen; i++) {
-		result &= requestCloseHandlers[i](detail);
-	}
-	return !!result; //Convert to boolean
+//Expose "update" method to pass values to singleton
+ReactOverlay.update = function() {
+	Overlay.classPrefix = ReactOverlay.classPrefix;
+	Overlay.container = ReactOverlay.container;
+	Overlay.pageWrap = ReactOverlay.pageWrap;
+	Overlay.requestCloseCallback = ReactOverlay.requestCloseCallback;
+	Overlay.destroy();
+	Overlay.init();
 };
-function addRequestCloseHandler(method) {
-	requestCloseHandlers.push(method);
-}
-function removeRequestCloseHandler(method) {
-	var requestCloseHandlersLen = requestCloseHandlers.length;
-	for (var i = 0; i < requestCloseHandlersLen; i++) {
-		if (requestCloseHandlers[i] === method) {
-			requestCloseHandlers.splice(i, 1);
-			break;
-		}
-	}
-}
-*/

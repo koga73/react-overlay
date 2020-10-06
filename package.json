@@ -2,10 +2,14 @@
 	"name": "@koga73/react-overlay",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
-	"style": "index.css",
+	"main": "dist/react-overlay.js",
+	"module": "dist/react-overlay.js",
+	"style": "dist/react-overlay.css",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"clean": "del-cli --force ./dist",
+		"build": "webpack --mode production",
+		"start": "cd example-react && npm run start",
+		"watch": "nodemon -e js,jsx,scss -x \"npm run build\""
 	},
 	"repository": {
 		"type": "git",
@@ -29,5 +33,19 @@
 		"@koga73/overlay": "file:../overlay",
 		"prop-types": "^15.7.2",
 		"react": "^16.13.1"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.11.6",
+		"@babel/polyfill": "^7.11.5",
+		"@babel/preset-react": "^7.10.4",
+		"babel-loader": "^8.1.0",
+		"css-loader": "^4.3.0",
+		"mini-css-extract-plugin": "^0.11.2",
+		"sass": "^1.26.11",
+		"sass-loader": "^10.0.2",
+		"webpack": "^4.44.2",
+		"webpack-cli": "^3.3.12",
+		"del-cli": "~3.0.1",
+		"nodemon": "~2.0.4"
 	}
 }
