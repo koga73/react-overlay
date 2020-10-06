@@ -51,29 +51,37 @@ class ReactOverlay extends React.Component {
 		this.handler_overlay_afterShow = this.handler_overlay_afterShow.bind(this);
 		this.handler_overlay_beforeHide = this.handler_overlay_beforeHide.bind(this);
 		this.handler_overlay_afterHide = this.handler_overlay_afterHide.bind(this);
+
+		//New instance per Overlay
+		const overlay = new Overlay();
+		overlay.init();
+		this.state = {overlay: overlay};
 	}
 
 	componentDidMount() {
-		addRequestCloseHandler(this.handler_overlay_requestClose);
-		Overlay.addEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
-		Overlay.addEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
-		Overlay.addEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
-		Overlay.addEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
+		const overlay = this.state.overlay;
+		overlay.requestCloseCallback = this.handler_overlay_requestClose;
+		overlay.addEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
+		overlay.addEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
+		overlay.addEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
+		overlay.addEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
 	}
 	componentWillUnmount() {
-		removeRequestCloseHandler(this.handler_overlay_requestClose);
-		Overlay.removeEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
-		Overlay.removeEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
-		Overlay.removeEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
-		Overlay.removeEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
+		const overlay = this.state.overlay;
+		overlay.requestCloseCallback = null;
+		overlay.removeEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
+		overlay.removeEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
+		overlay.removeEventListener(Overlay.EVENT_BEFORE_HIDE, this.handler_overlay_beforeHide);
+		overlay.removeEventListener(Overlay.EVENT_AFTER_HIDE, this.handler_overlay_afterHide);
 	}
 
 	componentDidUpdate(prevProps) {
 		if (this.props.isOpen != prevProps.isOpen) {
+			const overlay = this.state.overlay;
 			if (this.props.isOpen) {
-				Overlay.show(this.props.id);
+				overlay.show(this.props.id);
 			} else {
-				Overlay.hide();
+				overlay.hide();
 			}
 		}
 	}
@@ -163,6 +171,7 @@ for (let prop in Overlay) {
 }
 export default ReactOverlay;
 
+/*
 //requestCloseHandlers
 const requestCloseHandlers = [];
 Overlay.requestCloseCallback = function(detail) {
@@ -185,3 +194,4 @@ function removeRequestCloseHandler(method) {
 		}
 	}
 }
+*/
