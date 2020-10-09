@@ -1,0 +1,51 @@
+{
+	"name": "@koga73/react-overlay",
+	"version": "1.0.0",
+	"description": "A simple responsive modal system for the web. Fully accessible. Easy to style.",
+	"main": "dist/react-overlay.js",
+	"module": "dist/react-overlay.js",
+	"style": "dist/react-overlay.css",
+	"scripts": {
+		"clean": "del-cli --force ./dist",
+		"build": "webpack --mode production",
+		"start": "cd example-react && npm run start",
+		"watch": "nodemon -e js,jsx,scss -x \"npm run build\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/koga73/react-overlay.git"
+	},
+	"keywords": [
+		"react",
+		"overlay",
+		"modal",
+		"popup",
+		"dialog",
+		"lightbox"
+	],
+	"author": "AJ Savino",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/koga73/react-overlay/issues"
+	},
+	"homepage": "https://github.com/koga73/react-overlay#readme",
+	"dependencies": {
+		"@koga73/overlay": "^3.0.0",
+		"prop-types": "^15.7.2",
+		"react": "^16.13.1"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.11.6",
+		"@babel/polyfill": "^7.11.5",
+		"@babel/preset-react": "^7.10.4",
+		"babel-loader": "^8.1.0",
+		"css-loader": "^4.3.0",
+		"mini-css-extract-plugin": "^0.11.2",
+		"sass": "^1.26.11",
+		"sass-loader": "^10.0.2",
+		"webpack": "^4.44.2",
+		"webpack-cli": "^3.3.12",
+		"del-cli": "~3.0.1",
+		"nodemon": "~2.0.4"
+	}
+}
