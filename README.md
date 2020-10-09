@@ -119,16 +119,6 @@ class App extends React.Component {
 						id="myOverlay"
 						isOpen={isOpen}
 						onRequestClose={detail => this.setState({isOpen: false})}
-						actions={
-							<React.Fragment>
-								<button onClick={evt => this.setState({isOpen: false})}>
-									Cancel
-								</button>
-								<button display="primary" onClick={evt => this.setState({isOpen: false})}>
-									Save
-								</button>
-							</React.Fragment>
-						}
 					>
 						<p>Some content</p>
 					</ReactOverlay>
@@ -167,16 +157,6 @@ import "./example.scss";
 					id="myOverlay"
 					isOpen={isOpen}
 					onRequestClose={detail => this.setStateIsOpen(false)}
-					actions={
-						<React.Fragment>
-							<button onClick={evt => this.setState({isOpen: false})}>
-								Cancel
-							</button>
-							<button display="primary" onClick={evt => this.setState({isOpen: false})}>
-								Save
-							</button>
-						</React.Fragment>
-					}
 				>
 					<p>Some content</p>
 				</ReactOverlay>
