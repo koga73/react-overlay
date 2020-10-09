@@ -1,6 +1,6 @@
 {
 	"name": "@koga73/react-overlay",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "A simple responsive modal system for the web. Fully accessible. Easy to style.",
 	"main": "dist/react-overlay.js",
 	"module": "dist/react-overlay.js",
