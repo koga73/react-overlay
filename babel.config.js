@@ -1,4 +1,3 @@
 module.exports = {
-	presets: ["@babel/preset-react"],
-	plugins: []
+	presets: ["@babel/preset-react", ["minify", {builtIns: false}]]
 };
