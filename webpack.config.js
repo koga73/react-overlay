@@ -10,9 +10,12 @@ module.exports = {
 	entry: ["@babel/polyfill", `./src/${filename}.jsx`],
 	output: {
 		path: path.join(__dirname, output),
-		filename: `${filename}.js`,
+		filename: `${filename}.cjs.js`,
 		library: `${filename}`,
-		libraryTarget: "umd"
+		libraryTarget: "commonjs"
+	},
+	externals: {
+		react: "React"
 	},
 	module: {
 		rules: [
