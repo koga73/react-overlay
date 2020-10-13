@@ -32,10 +32,10 @@
 	},
 	"homepage": "https://github.com/koga73/react-overlay#readme",
 	"dependencies": {
-		"@koga73/overlay": "^3.0.0"
+		"@koga73/overlay": "^3.0.0",
+		"prop-types": "^15.7.2"
 	},
 	"peerDependencies": {
-		"prop-types": "^15.7.2",
 		"react": "^16.13.1"
 	},
 	"devDependencies": {
@@ -44,6 +44,7 @@
 		"@babel/polyfill": "^7.11.5",
 		"@babel/preset-react": "^7.10.4",
 		"babel-loader": "^8.1.0",
+		"babel-plugin-transform-remove-imports": "^1.4.1",
 		"babel-preset-minify": "^0.5.1",
 		"css-loader": "^4.3.0",
 		"del-cli": "~3.0.1",

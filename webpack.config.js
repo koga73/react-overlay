@@ -15,9 +15,7 @@ module.exports = {
 		libraryTarget: "commonjs"
 	},
 	externals: {
-		// Don"t bundle react or prop-types
-		react: "React",
-		"prop-types": "PropTypes"
+		react: "React"
 	},
 	module: {
 		rules: [

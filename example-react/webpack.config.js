@@ -19,6 +19,11 @@ module.exports = {
 		path: path.join(__dirname, "www"),
 		filename: `js/${filename}.min.js`
 	},
+	resolve: {
+		alias: {
+			react: path.resolve(__dirname, "./node_modules/react")
+		}
+	},
 	module: {
 		rules: [
 			{
