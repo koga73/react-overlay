@@ -1,9 +1,9 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 
 import ReactOverlay from "@koga73/react-overlay";
 
-import "./example.scss";
+import "./index.scss";
 
 class Example extends React.Component {
 	constructor(props) {
@@ -25,7 +25,7 @@ class Example extends React.Component {
 		/* Trigger overlay programmatically on load */
 		var div = document.createElement("div");
 		div.innerHTML = "Triggered programmatically";
-		Overlay.show(div, {
+		ReactOverlay.show(div, {
 			containerClass: "slide-up"
 			//width:"50%",
 			//height:"50%",
@@ -33,7 +33,7 @@ class Example extends React.Component {
 		});
 
 		setInterval(
-			function() {
+			function () {
 				this.setState({counter: this.state.counter + 1});
 			}.bind(this),
 			1000
@@ -63,7 +63,7 @@ class Example extends React.Component {
 			<div>
 				{/* Page content. Buttons to trigger overlays. "data-overlay-page-wrap" is used for trapping focus inside the overlay as an accessibility enhancement */}
 				<div id="container" data-overlay-page-wrap>
-					<a href="#myOverlay1" onClick={evt => this.setState({isOpen: true})}>
+					<a href="#myOverlay1" onClick={(evt) => this.setState({isOpen: true})}>
 						Slide Down
 					</a>
 				</div>
@@ -75,14 +75,15 @@ class Example extends React.Component {
 						id="myOverlay1"
 						containerClass="slide-down"
 						isOpen={this.state.isOpen}
-						onRequestClose={detail => this.handler_overlay_requestClose(detail)}
+						onRequestClose={(detail) => this.handler_overlay_requestClose(detail)}
 						onBeforeShow={(evt, detail) => this.handler_overlay_beforeShow(evt, detail)}
 						onAfterShow={(evt, detail) => this.handler_overlay_afterShow(evt, detail)}
 						onBeforeHide={(evt, detail) => this.handler_overlay_beforeHide(evt, detail)}
 						onAfterHide={(evt, detail) => this.handler_overlay_afterHide(evt, detail)}
 					>
-						<h1 onClick={evt => ReactOverlay.hide()}>Slide Down</h1>
+						<h1 onClick={(evt) => this.setState({isOpen: false})}>Slide Down</h1>
 						<p>{this.state.counter}</p>
+						<button onClick={(evt) => this.setState({isOpen: false})}>Close</button>
 					</ReactOverlay>
 				</div>
 			</div>
@@ -90,4 +91,7 @@ class Example extends React.Component {
 	}
 }
 
-ReactDOM.render(<Example />, document.getElementById("root"));
+const rootEl = document.getElementById("root");
+ReactOverlay.container = rootEl; //Specify the root element as the container when using React-DOM 18
+const root = ReactDOM.createRoot(rootEl);
+root.render(<Example />);
