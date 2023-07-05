@@ -1,4 +1,5 @@
 import React from "react";
+import ReactDOM from "react-dom/client";
 import PropTypes from "prop-types";
 
 import Overlay from "@koga73/overlay";
@@ -10,6 +11,8 @@ const propTypes = {
 	children: PropTypes.node.isRequired,
 	className: PropTypes.string,
 	classPrefix: PropTypes.string,
+	container: PropTypes.node,
+	pageWrap: PropTypes.node,
 	isOpen: PropTypes.bool,
 	width: PropTypes.string,
 	height: PropTypes.string,
@@ -29,7 +32,9 @@ const defaultProps = {
 	id: null,
 	children: null,
 	className: null,
-	classPrefix: null,
+	classPrefix: undefined,
+	container: undefined,
+	pageWrap: undefined,
 	isOpen: undefined,
 	width: undefined,
 	height: undefined,
@@ -60,9 +65,13 @@ class ReactOverlay extends React.Component {
 	}
 
 	componentDidMount() {
+		const {classPrefix, container, pageWrap} = this.props;
+
 		//New instance
 		const overlay = new Overlay();
-		overlay.classPrefix = this.props.classPrefix;
+		overlay.classPrefix = classPrefix || ReactOverlay.classPrefix;
+		overlay.container = container || ReactOverlay.container;
+		overlay.pageWrap = pageWrap || ReactOverlay.pageWrap;
 		overlay.init();
 		this.setState({overlay});
 
@@ -142,6 +151,8 @@ class ReactOverlay extends React.Component {
 			children,
 			className,
 			classPrefix,
+			container,
+			pageWrap,
 			isOpen,
 			width,
 			height,
@@ -187,7 +198,7 @@ for (let prop in Overlay) {
 export default ReactOverlay;
 
 //Expose "update" method to pass values to singleton
-ReactOverlay.update = function() {
+ReactOverlay.update = function () {
 	Overlay.classPrefix = ReactOverlay.classPrefix;
 	Overlay.container = ReactOverlay.container;
 	Overlay.pageWrap = ReactOverlay.pageWrap;
