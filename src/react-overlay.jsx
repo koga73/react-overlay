@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
 import PropTypes from "prop-types";
 
 import Overlay from "@koga73/overlay";
