@@ -197,11 +197,21 @@ for (let prop in Overlay) {
 export default ReactOverlay;
 
 //Expose "update" method to pass values to singleton
-ReactOverlay.update = function () {
+ReactOverlay.update = function ({classPrefix, container, pageWrap, requestCloseCallback} = {}) {
+	ReactOverlay.classPrefix = classPrefix || ReactOverlay.classPrefix;
+	ReactOverlay.container = container || ReactOverlay.container;
+	ReactOverlay.pageWrap = pageWrap || ReactOverlay.pageWrap;
+	ReactOverlay.requestCloseCallback = requestCloseCallback || ReactOverlay.requestCloseCallback;
+
 	Overlay.classPrefix = ReactOverlay.classPrefix;
 	Overlay.container = ReactOverlay.container;
 	Overlay.pageWrap = ReactOverlay.pageWrap;
 	Overlay.requestCloseCallback = ReactOverlay.requestCloseCallback;
 	Overlay.destroy();
 	Overlay.init();
+
+	//Update window reference
+	window["Overlay"] = Overlay;
+
+	return ReactOverlay;
 };
