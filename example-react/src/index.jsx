@@ -92,6 +92,6 @@ class Example extends React.Component {
 }
 
 const rootEl = document.getElementById("root");
-ReactOverlay.container = rootEl; //Specify the root element as the container when using React-DOM 18
-const root = ReactDOM.createRoot(rootEl);
-root.render(<Example />);
+ReactDOM.createRoot(rootEl).render(<Example />);
+//Specify the root element as the container when using React-DOM 18
+ReactOverlay.update({container: rootEl});

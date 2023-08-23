@@ -1,6 +1,6 @@
 {
 	"name": "@koga73/react-overlay",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "A simple responsive modal system for the web. Fully accessible. Easy to style.",
 	"module": "dist/react-overlay.esm.js",
 	"style": "src/react-overlay.scss",
@@ -40,6 +40,7 @@
 		"@babel/preset-react": "^7.22.5",
 		"babel-plugin-transform-remove-imports": "^1.7.0",
 		"babel-preset-minify": "^0.5.2",
+		"del-cli": "^5.0.0",
 		"sass": "^1.63.6"
 	}
 }
