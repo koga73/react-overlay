@@ -182,7 +182,7 @@ import ReactDOM from "react-dom/client";
 import ReactOverlay from "@koga73/react-overlay";
 
 const rootEl = document.getElementById("root");
-ReactOverlay.container = rootEl; //Specify the root element as the container when using React-DOM 18
-const root = ReactDOM.createRoot(rootEl);
-root.render(<Example />);
+ReactDOM.createRoot(rootEl).render(<Example />);
+//Specify the root element as the container when using React-DOM 18
+ReactOverlay.update({container: rootEl});
 ```
