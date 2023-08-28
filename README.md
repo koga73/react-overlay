@@ -151,6 +151,7 @@ The following callbacks are parsed out and any other callbacks get passed-throug
 -   **onAfterShow** | Function | Params: (evt, detail) | Fires when Overlay is fully shown after transitions are complete
 -   **onBeforeHide** | Function | Params: (evt, detail) | Fires when Overlay begins to hide but before transitions are complete
 -   **onAfterHide** | Function | Params: (evt, detail) | Fires when Overlay is fully hidden after transitions are complete
+-   **onOverlayChange** | Function | Params: (overlay) | Fires when Overlay instance is initialized or destroyed and passes the instance
 
 ---
 

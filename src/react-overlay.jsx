@@ -25,7 +25,8 @@ const propTypes = {
 	onBeforeShow: PropTypes.func,
 	onAfterShow: PropTypes.func,
 	onBeforeHide: PropTypes.func,
-	onAfterHide: PropTypes.func
+	onAfterHide: PropTypes.func,
+	onOverlayChange: PropTypes.func
 };
 const defaultProps = {
 	id: null,
@@ -47,7 +48,8 @@ const defaultProps = {
 	onBeforeShow: undefined,
 	onAfterShow: undefined,
 	onBeforeHide: undefined,
-	onAfterHide: undefined
+	onAfterHide: undefined,
+	onOverlayChange: undefined
 };
 
 class ReactOverlay extends React.Component {
@@ -64,15 +66,19 @@ class ReactOverlay extends React.Component {
 	}
 
 	componentDidMount() {
-		const {classPrefix, container, pageWrap} = this.props;
+		const {classPrefix, container, pageWrap, onOverlayChange} = this.props;
 
 		//New instance
 		const overlay = new Overlay();
 		overlay.classPrefix = classPrefix || ReactOverlay.classPrefix;
 		overlay.container = container || ReactOverlay.container;
 		overlay.pageWrap = pageWrap || ReactOverlay.pageWrap;
-		overlay.init();
+		overlay.init(document.body, true);
+
 		this.setState({overlay});
+		if (onOverlayChange) {
+			onOverlayChange.call(this, overlay);
+		}
 
 		overlay.requestCloseCallback = this.handler_overlay_requestClose;
 		overlay.addEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
@@ -85,6 +91,8 @@ class ReactOverlay extends React.Component {
 		if (!overlay) {
 			return;
 		}
+		const {onOverlayChange} = this.props;
+
 		overlay.requestCloseCallback = null;
 		overlay.removeEventListener(Overlay.EVENT_BEFORE_SHOW, this.handler_overlay_beforeShow);
 		overlay.removeEventListener(Overlay.EVENT_AFTER_SHOW, this.handler_overlay_afterShow);
@@ -93,15 +101,23 @@ class ReactOverlay extends React.Component {
 
 		//Clean up instance
 		overlay.destroy();
+
 		this.setState({overlay: null});
+		if (onOverlayChange) {
+			onOverlayChange.call(this, null);
+		}
 	}
 
 	componentDidUpdate(prevProps) {
 		//NOTE: Should we check classPrefix for update and reinitialize?
 		if (this.props.isOpen != prevProps.isOpen) {
+			const {isOpen, id, classPrefix, container, pageWrap} = this.props;
 			const overlay = this.state.overlay;
-			if (this.props.isOpen) {
-				overlay.show(this.props.id);
+			if (isOpen) {
+				overlay.classPrefix = classPrefix || ReactOverlay.classPrefix;
+				overlay.container = container || ReactOverlay.container;
+				overlay.pageWrap = pageWrap || ReactOverlay.pageWrap;
+				overlay.show(id);
 			} else {
 				overlay.hide();
 			}
@@ -166,6 +182,7 @@ class ReactOverlay extends React.Component {
 			onAfterShow,
 			onBeforeHide,
 			onAfterHide,
+			onOverlayChange,
 			...props
 		} = this.props;
 
@@ -208,7 +225,7 @@ ReactOverlay.update = function ({classPrefix, container, pageWrap, requestCloseC
 	Overlay.pageWrap = ReactOverlay.pageWrap;
 	Overlay.requestCloseCallback = ReactOverlay.requestCloseCallback;
 	Overlay.destroy();
-	Overlay.init();
+	Overlay.init(document.body, true);
 
 	//Update window reference
 	window["Overlay"] = Overlay;
