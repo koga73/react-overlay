@@ -1,6 +1,6 @@
 {
 	"name": "@koga73/react-overlay",
-	"version": "1.0.6",
+	"version": "1.0.7",
 	"description": "A simple responsive modal system for the web. Fully accessible. Easy to style.",
 	"module": "dist/react-overlay.esm.js",
 	"style": "src/react-overlay.scss",
@@ -28,7 +28,7 @@
 	},
 	"homepage": "https://github.com/koga73/react-overlay#readme",
 	"dependencies": {
-		"@koga73/overlay": "^3.0.1",
+		"@koga73/overlay": "^3.0.2",
 		"prop-types": "^15.7.2"
 	},
 	"peerDependencies": {

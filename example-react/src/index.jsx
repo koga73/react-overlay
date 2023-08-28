@@ -22,6 +22,12 @@ class Example extends React.Component {
 	}
 
 	componentDidMount() {
+		//Specify the the container and pageWrap element when using React-DOM 18
+		ReactOverlay.update({
+			container: document.getElementById("root"),
+			pageWrap: document.getElementById("page")
+		});
+
 		/* Trigger overlay programmatically on load */
 		var div = document.createElement("div");
 		div.innerHTML = "Triggered programmatically";
@@ -60,13 +66,12 @@ class Example extends React.Component {
 
 	render() {
 		return (
-			<div>
-				{/* Page content. Buttons to trigger overlays. "data-overlay-page-wrap" is used for trapping focus inside the overlay as an accessibility enhancement */}
-				<div id="container" data-overlay-page-wrap>
+			<React.Fragment>
+				<main id="page">
 					<a href="#myOverlay1" onClick={(evt) => this.setState({isOpen: true})}>
 						Slide Down
 					</a>
-				</div>
+				</main>
 
 				{/* This container serves as a place for your overlays to live when they are not open */}
 				<div style={{display: "none"}}>
@@ -86,12 +91,10 @@ class Example extends React.Component {
 						<button onClick={(evt) => this.setState({isOpen: false})}>Close</button>
 					</ReactOverlay>
 				</div>
-			</div>
+			</React.Fragment>
 		);
 	}
 }
 
 const rootEl = document.getElementById("root");
 ReactDOM.createRoot(rootEl).render(<Example />);
-//Specify the root element as the container when using React-DOM 18
-ReactOverlay.update({container: rootEl});
